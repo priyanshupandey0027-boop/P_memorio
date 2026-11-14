@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CHRONOS // NEXUS - Quantum Schedule & Directive Matrix</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💠</text></svg>">
+</head>
+<body>
+  <!-- Dynamic Canvas Background for Cyber Particles -->
+  <canvas id="bg-canvas"></canvas>
+  <div class="cyber-grid-overlay"></div>
+  <div class="scanlines"></div>
+
+  <div class="app-container">
+    <!-- ======================================================================
+         TOP HUD BAR
+         ====================================================================== -->
+    <header class="top-hud">
+      <div class="brand-section">
+        <a href="#" class="brand-logo">
+          <div class="hud-emblem">
+            <svg viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="44" stroke="var(--accent-cyan)" stroke-width="3" fill="none" stroke-dasharray="10 8" />
+              <polygon points="50,15 80,75 20,75" stroke="var(--accent-cyan)" stroke-width="2.5" fill="none" />
+              <circle cx="50" cy="50" r="8" fill="var(--accent-cyan)" />
+            </svg>
+          </div>
+          <div class="brand-text">
+            <div class="brand-title">CHRONOS <span>//</span> NEXUS</div>
+            <div class="brand-sub">QUANTUM SCHEDULE & DIRECTIVES MATRIX</div>
+          </div>
+        </a>
+      </div>
+
+      <!-- Live Telemetry & Dual Clock -->
+      <div class="telemetry-cluster">
+        <div class="system-status" title="Quantum Sync Status">
+          <div class="pulse-node"></div>
+          <span id="telemetry-label">CORE ONLINE // 12ms</span>
+        </div>
+
+        <div class="clock-display">
+          <div class="clock-time" id="hud-clock">00:00:00</div>
+          <div class="clock-date" id="hud-date">SAT // 14 NOV 2026</div>
+        </div>
+      </div>
+
+      <!-- Action Controls -->
+      <div class="hud-controls">
+        <button class="icon-btn" id="btn-toggle-sfx" title="Toggle Sci-Fi SFX (M)">
+          <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+          <span id="sfx-status-text">SFX: ON</span>
+        </button>
+
+        <select class="theme-selector" id="theme-selector" title="Select HUD Visual Scheme">
+          <option value="cyan">Cyber Cyan</option>
+          <option value="violet">Synth Violet</option>
+          <option value="emerald">Matrix Emerald</option>
+          <option value="amber">Solar Amber</option>
+          <option value="crimson">Neon Crimson</option>
+        </select>
+
+        <button class="icon-btn" id="btn-cmd-palette" title="Command Palette (Ctrl + K)">
+          <svg viewBox="0 0 24 24"><path d="M20 19.59V8l-6-6H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c.45 0 .85-.15 1.19-.4l-4.43-4.43c-.8.52-1.77.83-2.76.83-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5c0 .99-.31 1.96-.83 2.76L20 19.59zM9 13c0-1.66 1.34-3 3-3s3 1.34 3 3-1.34 3-3 3-3-1.34-3-3z"/></svg>
+          <span>CTRL+K</span>
+        </button>
+
+        <button class="icon-btn btn-primary-hud" id="btn-add-meeting">
+          <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+          <span>Schedule Meeting</span>
+        </button>
+
+        <button class="icon-btn btn-primary-hud" id="btn-add-task">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 14h-3v3h-2v-3H8v-2h3v-3h2v3h3v2zm-3-7V3.5L18.5 9H13z"/></svg>
+          <span>Add Directive</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ======================================================================
+         RADAR BANNER: NEXT UPCOMING MEETING COUNTDOWN
+         ====================================================================== -->
+    <section class="priority-radar-banner" id="priority-radar">
+      <div class="radar-left">
+        <div class="radar-signal">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z"/></svg>
+        </div>
+        <div class="radar-info">
+          <div class="radar-tag">
+            <span class="pulse-node" style="width: 6px; height: 6px;"></span>
+            <span>NEXT MISSION / MEETING RADAR</span>
+          </div>
+          <div class="radar-title" id="radar-meeting-title">Global Architecture & AI Directive Sync</div>
+          <div class="radar-meta" id="radar-meeting-meta">
+            <span>📅 Today, 14:00 - 15:00</span>
+            <span>📍 Google Meet / Hologram #04</span>
+            <span>👥 5 Personnel</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="radar-countdown-box">
+        <div class="countdown-timer">
+          <div class="countdown-digits" id="radar-countdown">T-MINUS 00:00:00</div>
+          <div class="countdown-label">TIME TO COMMENCEMENT</div>
+        </div>
+        <div class="radar-actions">
+          <button class="btn-join" id="radar-btn-join">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+            <span>ENGAGE COMM</span>
+          </button>
+          <button class="icon-btn" id="radar-btn-ics" title="Export .ICS Calendar Invite">
+            <svg viewBox="0 0 24 24" width="15" height="15"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/></svg>
+            <span>.ICS</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         TELEMETRY METRICS ROW
+         ====================================================================== -->
+    <section class="telemetry-row">
+      <div class="metric-card">
+        <div class="metric-label">DIRECTIVES VELOCITY <span id="metric-completion-percent">75%</span></div>
+        <div class="metric-val"><span id="metric-completed-count">12</span> <span class="metric-sub">/ <span id="metric-total-count">16</span> DONE</span></div>
+        <div class="metric-progress-bar">
+          <div class="metric-progress-fill" id="metric-progress-bar" style="width: 75%;"></div>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-label">SCHEDULED MISSIONS</div>
+        <div class="metric-val" id="metric-meetings-count">4 <span class="metric-sub">EVENTS TODAY</span></div>
+        <div class="metric-progress-bar">
+          <div class="metric-progress-fill" style="width: 60%; background: linear-gradient(90deg, var(--accent-cyan), var(--accent-amber));"></div>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-label">CRITICAL DIRECTIVES</div>
+        <div class="metric-val" id="metric-critical-count" style="color: var(--accent-danger);">2 <span class="metric-sub">HIGH PRIORITY</span></div>
+        <div class="metric-progress-bar">
+          <div class="metric-progress-fill" style="width: 40%; background: var(--accent-danger);"></div>
+        </div>
+      </div>
+
+      <div class="metric-card">
+        <div class="metric-label">QUANTUM FOCUS STREAK</div>
+        <div class="metric-val">14 <span class="metric-sub">DAYS ACTIVE</span></div>
+        <div class="metric-progress-bar">
+          <div class="metric-progress-fill" style="width: 90%; background: var(--accent-green);"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         VIEW NAVIGATION TABS & TOOLBAR
+         ====================================================================== -->
+    <nav class="view-nav">
+      <div class="nav-tabs">
+        <button class="nav-tab-btn active" data-view="dashboard">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+          <span>HUD Dashboard</span>
+        </button>
+
+        <button class="nav-tab-btn" data-view="meetings">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
+          <span>Meetings Timeline</span>
+          <span class="badge-pill" id="badge-meeting-count">4</span>
+        </button>
+
+        <button class="nav-tab-btn" data-view="tasks">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
+          <span>Task Matrix</span>
+          <span class="badge-pill" id="badge-task-count">6</span>
+        </button>
+
+        <button class="nav-tab-btn" data-view="calendar">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/></svg>
+          <span>Calendar Grid</span>
+        </button>
+      </div>
+
+      <div class="view-quick-tools">
+        <div class="search-input-box">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+          <input type="text" id="global-search-input" class="hud-search" placeholder="Search directives & meetings..." />
+        </div>
+
+        <button class="icon-btn" id="btn-export-data" title="Backup / Export Data (JSON)">
+          <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+          <span>Export</span>
+        </button>
+
+        <button class="icon-btn" id="btn-reset-demo" title="Reload futuristic sample directives & meetings">
+          <svg viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+          <span>Demo Data</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- ======================================================================
+         VIEW 1: HUD DASHBOARD (SPLIT SCHEDULE & DIRECTIVES)
+         ====================================================================== -->
+    <main class="view-panel active" id="view-dashboard">
+      <div class="hud-split-grid">
+        <!-- Left: Today's Scheduled Meetings -->
+        <div class="hud-column">
+          <div class="column-header">
+            <div class="column-title">
+              <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+              <span>SCHEDULED SESSIONS</span>
+            </div>
+            <button class="icon-btn" id="btn-quick-new-meeting">+ Schedule</button>
+          </div>
+
+          <div class="meeting-list" id="dashboard-meeting-list">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Right: Priority Directives & To-Do -->
+        <div class="hud-column">
+          <div class="column-header">
+            <div class="column-title">
+              <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+              <span>ACTIVE DIRECTIVES</span>
+            </div>
+            <button class="icon-btn" id="btn-quick-new-task">+ Directive</button>
+          </div>
+
+          <!-- Quick Add Bar -->
+          <div class="quick-add-task-bar">
+            <input type="text" id="dashboard-quick-task-input" class="quick-add-input" placeholder="Enter new directive and press Enter..." />
+            <button class="icon-btn btn-primary-hud" id="dashboard-quick-task-btn">Add</button>
+          </div>
+
+          <div class="task-list" id="dashboard-task-list">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ======================================================================
+         VIEW 2: FULL MEETINGS TIMELINE
+         ====================================================================== -->
+    <section class="view-panel" id="view-meetings">
+      <div class="column-header" style="margin-bottom: 1.25rem;">
+        <div class="column-title">
+          <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/></svg>
+          <span>CHRONO TIMELINE // ALL SCHEDULED SESSIONS</span>
+        </div>
+        <div style="display: flex; gap: 0.75rem;">
+          <select class="theme-selector" id="meeting-filter-cat">
+            <option value="all">All Protocols / Categories</option>
+            <option value="Tactical Sync">Tactical Sync</option>
+            <option value="Architecture Review">Architecture Review</option>
+            <option value="Design Sprint">Design Sprint</option>
+            <option value="1-on-1 Pulse">1-on-1 Pulse</option>
+          </select>
+          <button class="icon-btn btn-primary-hud" onclick="openMeetingModal()">+ Schedule New Meeting</button>
+        </div>
+      </div>
+
+      <div class="meeting-list" id="full-meeting-list">
+        <!-- Rendered by JS -->
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         VIEW 3: TASK MATRIX (KANBAN & LIST)
+         ====================================================================== -->
+    <section class="view-panel" id="view-tasks">
+      <div class="column-header" style="margin-bottom: 1.25rem;">
+        <div class="column-title">
+          <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+          <span>TACTICAL DIRECTIVE BOARD // KANBAN MATRIX</span>
+        </div>
+        <div style="display: flex; gap: 0.75rem;">
+          <button class="icon-btn" id="btn-toggle-task-view">Toggle List View</button>
+          <button class="icon-btn btn-primary-hud" onclick="openTaskModal()">+ New Directive</button>
+        </div>
+      </div>
+
+      <!-- Kanban 4-stage Matrix -->
+      <div class="kanban-board" id="kanban-container">
+        <!-- Column 1: Backlog -->
+        <div class="kanban-col" data-status="backlog">
+          <div class="kanban-col-header">
+            <div class="kanban-col-title">
+              <span class="pulse-node" style="background: var(--text-dim);"></span>
+              <span>BACKLOG</span>
+            </div>
+            <span class="kanban-count" id="count-backlog">0</span>
+          </div>
+          <div class="kanban-col-cards" id="kanban-col-backlog"></div>
+        </div>
+
+        <!-- Column 2: In Orbit (In Progress) -->
+        <div class="kanban-col" data-status="in-progress">
+          <div class="kanban-col-header">
+            <div class="kanban-col-title">
+              <span class="pulse-node" style="background: var(--accent-cyan);"></span>
+              <span>IN ORBIT</span>
+            </div>
+            <span class="kanban-count" id="count-in-progress">0</span>
+          </div>
+          <div class="kanban-col-cards" id="kanban-col-in-progress"></div>
+        </div>
+
+        <!-- Column 3: Under Review -->
+        <div class="kanban-col" data-status="review">
+          <div class="kanban-col-header">
+            <div class="kanban-col-title">
+              <span class="pulse-node" style="background: var(--accent-amber);"></span>
+              <span>REVIEW / QA</span>
+            </div>
+            <span class="kanban-count" id="count-review">0</span>
+          </div>
+          <div class="kanban-col-cards" id="kanban-col-review"></div>
+        </div>
+
+        <!-- Column 4: Completed -->
+        <div class="kanban-col" data-status="done">
+          <div class="kanban-col-header">
+            <div class="kanban-col-title">
+              <span class="pulse-node" style="background: var(--accent-green);"></span>
+              <span>COMPLETED</span>
+            </div>
+            <span class="kanban-count" id="count-done">0</span>
+          </div>
+          <div class="kanban-col-cards" id="kanban-col-done"></div>
+        </div>
+      </div>
+
+      <!-- Optional List View (hidden by default) -->
+      <div class="task-list" id="full-task-list-view" style="display: none; margin-top: 1rem;"></div>
+    </section>
+
+    <!-- ======================================================================
+         VIEW 4: CALENDAR GRID VISUALIZER
+         ====================================================================== -->
+    <section class="view-panel" id="view-calendar">
+      <div class="calendar-view-container">
+        <!-- Left: Mini Interactive Month Calendar -->
+        <div class="calendar-card">
+          <div class="calendar-header">
+            <button class="icon-btn" id="cal-prev-month">&lt;</button>
+            <div class="brand-title" id="cal-month-title" style="font-size: 1.05rem;">NOVEMBER 2026</div>
+            <button class="icon-btn" id="cal-next-month">&gt;</button>
+          </div>
+          <table class="calendar-grid-table">
+            <thead>
+              <tr>
+                <th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th>
+              </tr>
+            </thead>
+            <tbody id="cal-grid-body">
+              <!-- Dynamically populated dates -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Right: Selected Date Agenda -->
+        <div class="hud-column">
+          <div class="column-header">
+            <div class="column-title">
+              <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
+              <span id="cal-selected-date-label">AGENDA FOR SELECTED DATE</span>
+            </div>
+          </div>
+          <div class="meeting-list" id="cal-agenda-meeting-list"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         FOOTER
+         ====================================================================== -->
+    <footer class="hud-footer">
+      <div>CHRONOS // NEXUS OS v3.8.4 &bull; QUANTUM WORKFLOW INTERFACE &bull; 100% CLIENT ENCRYPTED</div>
+      <div>HOTKEYS: <kbd>Ctrl+K</kbd> Command Palette &bull; <kbd>M</kbd> Mute Audio &bull; <kbd>N</kbd> New Directive</div>
+    </footer>
+  </div>
+
+  <!-- ======================================================================
+       MODAL: SCHEDULE MEETING
+       ====================================================================== -->
+  <div class="modal-overlay" id="modal-meeting">
+    <div class="hud-modal">
+      <div class="modal-header">
+        <div class="modal-title">
+          <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11z"/></svg>
+          <span id="modal-meeting-title-text">SCHEDULE MISSION / MEETING</span>
+        </div>
+        <button class="btn-close-modal" onclick="closeMeetingModal()" aria-label="Close">&times;</button>
+      </div>
+
+      <form id="form-meeting" class="modal-body">
+        <input type="hidden" id="meeting-edit-id" value="">
+
+        <div class="form-group">
+          <label class="form-label" for="meeting-input-title">Session Subject / Title</label>
+          <input type="text" id="meeting-input-title" class="form-input" placeholder="e.g., Deep Space Propulsion Sync" required>
+        </div>
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label" for="meeting-input-date">Date</label>
+            <input type="date" id="meeting-input-date" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="meeting-input-category">Protocol Category</label>
+            <select id="meeting-input-category" class="form-select">
+              <option value="Tactical Sync">Tactical Sync</option>
+              <option value="Architecture Review">Architecture Review</option>
+              <option value="Design Sprint">Design Sprint</option>
+              <option value="Neural AI Sync">Neural AI Sync</option>
+              <option value="1-on-1 Pulse">1-on-1 Pulse</option>
+              <option value="Client Strategic">Client Strategic</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label" for="meeting-input-start">Start Time</label>
+            <input type="time" id="meeting-input-start" class="form-input" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="meeting-input-end">End Time</label>
+            <input type="time" id="meeting-input-end" class="form-input" required>
+          </div>
+        </div>
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label" for="meeting-input-platform">Platform / Frequency</label>
+            <select id="meeting-input-platform" class="form-select">
+              <option value="Google Meet">Google Meet</option>
+              <option value="Hologram Comm Room">Hologram Comm Room</option>
+              <option value="Zoom Telelink">Zoom Telelink</option>
+              <option value="Microsoft Teams">Microsoft Teams</option>
+              <option value="Orbital Briefing Hall (Physical)">Orbital Briefing Hall</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="meeting-input-link">Comm Link URL</label>
+            <input type="text" id="meeting-input-link" class="form-input" placeholder="https://meet.google.com/xyz-abc" value="https://meet.google.com/fut-sync-2026">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="meeting-input-attendees">Personnel / Attendees (Comma-separated)</label>
+          <input type="text" id="meeting-input-attendees" class="form-input" placeholder="Commander Shepard, Dr. Tali, Jax" value="Dr. Vance, Jax, Elena R.">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="meeting-input-desc">Agenda & Directives</label>
+          <textarea id="meeting-input-desc" class="form-textarea" rows="3" placeholder="Outline primary discussion points and deliverables..."></textarea>
+        </div>
+
+        <div id="modal-meeting-clash-box" style="display: none;" class="meeting-clash-warning">
+          ⚠️ Warning: Time slot conflicts with another scheduled meeting!
+        </div>
+
+        <div class="modal-footer" style="padding: 0; margin-top: 0.5rem; background: none; border: none;">
+          <button type="button" class="icon-btn" onclick="closeMeetingModal()">Cancel</button>
+          <button type="submit" class="icon-btn btn-primary-hud">Save Session</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MODAL: NEW / EDIT DIRECTIVE (TASK)
+       ====================================================================== -->
+  <div class="modal-overlay" id="modal-task">
+    <div class="hud-modal">
+      <div class="modal-header">
+        <div class="modal-title">
+          <svg viewBox="0 0 24 24" width="20" height="20"><path fill="currentColor" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+          <span id="modal-task-title-text">NEW DIRECTIVE PROTOCOL</span>
+        </div>
+        <button class="btn-close-modal" onclick="closeTaskModal()" aria-label="Close">&times;</button>
+      </div>
+
+      <form id="form-task" class="modal-body">
+        <input type="hidden" id="task-edit-id" value="">
+
+        <div class="form-group">
+          <label class="form-label" for="task-input-title">Directive Description</label>
+          <input type="text" id="task-input-title" class="form-input" placeholder="e.g., Calibrate primary quantum shielding matrix" required>
+        </div>
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label" for="task-input-priority">Priority Level</label>
+            <select id="task-input-priority" class="form-select">
+              <option value="critical">CRITICAL (Red Alert)</option>
+              <option value="high">HIGH (Amber)</option>
+              <option value="medium" selected>MEDIUM (Cyan)</option>
+              <option value="low">LOW (Muted)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="task-input-status">Execution State</label>
+            <select id="task-input-status" class="form-select">
+              <option value="backlog">Backlog</option>
+              <option value="in-progress" selected>In Orbit (In Progress)</option>
+              <option value="review">Review / QA</option>
+              <option value="done">Completed</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label" for="task-input-duedate">Due Date</label>
+            <input type="date" id="task-input-duedate" class="form-input">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="task-input-tag">Sector / Tag</label>
+            <input type="text" id="task-input-tag" class="form-input" placeholder="Systems, Frontend, Security..." value="Frontend">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="task-input-subtasks">Subtask Milestones (One per line)</label>
+          <textarea id="task-input-subtasks" class="form-textarea" rows="3" placeholder="Step 1: Inspect telemetry&#10;Step 2: Deploy patch&#10;Step 3: Verify quantum integrity"></textarea>
+        </div>
+
+        <div class="modal-footer" style="padding: 0; margin-top: 0.5rem; background: none; border: none;">
+          <button type="button" class="icon-btn" onclick="closeTaskModal()">Cancel</button>
+          <button type="submit" class="icon-btn btn-primary-hud">Commit Directive</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MODAL: HOLOGRAPHIC COMM SIMULATOR
+       ====================================================================== -->
+  <div class="modal-overlay" id="modal-comm-sim">
+    <div class="hud-modal" style="max-width: 620px;">
+      <div class="modal-header">
+        <div class="modal-title">
+          <span class="pulse-node" style="background: var(--accent-cyan);"></span>
+          <span id="comm-sim-title">HOLOGRAM COMM LINK // ESTABLISHED</span>
+        </div>
+        <button class="btn-close-modal" onclick="closeCommSimulator()" aria-label="Close">&times;</button>
+      </div>
+
+      <div class="modal-body" style="padding: 1.25rem;">
+        <div class="holo-comm-screen">
+          <div class="holo-avatar">
+            <svg viewBox="0 0 24 24" width="46" height="46" fill="var(--accent-cyan)"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+          </div>
+          <div class="holo-status" id="comm-sim-status">SECURE QUANTUM CHANNEL ACTIVE // 4096-BIT QUANTUM KEY</div>
+          <div class="holo-waves">
+            <div class="holo-bar"></div>
+            <div class="holo-bar"></div>
+            <div class="holo-bar"></div>
+            <div class="holo-bar"></div>
+            <div class="holo-bar"></div>
+          </div>
+          <div style="margin-top: 1.5rem; display: flex; gap: 0.75rem;">
+            <button class="icon-btn" id="comm-btn-mute-mic">🎤 Mute Mic</button>
+            <button class="icon-btn" id="comm-btn-camera">📹 Holo Cam: ON</button>
+            <a href="#" target="_blank" id="comm-sim-external-link" class="btn-join" style="text-decoration: none;">Launch External Room</a>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top: 1rem;">
+          <label class="form-label">Real-time Session Scratchpad</label>
+          <textarea class="form-textarea" rows="3" placeholder="Type quick notes during this session..."></textarea>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="icon-btn" onclick="closeCommSimulator()">Disconnect Comm Link</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       MODAL: COMMAND PALETTE (CTRL + K)
+       ====================================================================== -->
+  <div class="modal-overlay" id="modal-cmd-palette">
+    <div class="hud-modal cmd-palette-modal">
+      <div class="cmd-input-wrapper">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="var(--accent-cyan)"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+        <input type="text" id="cmd-palette-input" class="cmd-input" placeholder="Type a command or search (e.g., 'new task', 'sync', 'violet')..." autofocus>
+        <span class="cmd-item-shortcut">ESC</span>
+      </div>
+      <div class="cmd-results-list" id="cmd-palette-results">
+        <!-- Results rendered dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="hud-toast-container" id="toast-container"></div>
+
+  <!-- Main JavaScript Logic -->
+  <script src="app.js"></script>
+</body>
+</html>
